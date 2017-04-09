@@ -1,0 +1,133 @@
+﻿<Controls:MetroWindow x:Class="Project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        BorderBrush="#f1f1f1"
+        Title="File Browser" Height="600" Width="1000">
+
+    <Grid Name="MainGrid">
+
+        <StackPanel Orientation="Horizontal" >
+            <Menu Grid.Row="0" Grid.Column="0" VerticalContentAlignment="Center" VerticalAlignment="Top">
+                <MenuItem Header="File">
+                    <MenuItem Header="Add to My files" Click="AddToMyFiles"></MenuItem>
+                    <MenuItem Header="Close"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="View"></MenuItem>
+                <MenuItem Header="Tools"></MenuItem>
+                <MenuItem Header="Help"></MenuItem>
+            </Menu>
+        </StackPanel>
+        
+        <GridSplitter Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="1" Margin="0,27,0,0"/>
+
+        <Border Cursor="Hand" Padding="5">
+            <StackPanel Name="StaticFolder" Grid.Row="1" Grid.Column="0" Orientation="Vertical" Width="200" HorizontalAlignment="Left" Margin="0,30,0,0">
+                <StackPanel Tag="Desktop" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="PopulateMyFiles" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/file.png" Width="20"/>
+                    <Label Name="MyFilesUI" Content="My Files" MinWidth="170" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Tag="Desktop" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="PopulateSharingFiles" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/share.png" Width="20"/>
+                    <Label Name="SharedFolderUI" Content="Sharing" MinWidth="170" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Tag="Desktop" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/desktop.png" Width="20"/>
+                    <Label Name="desktop" Content="Desktop" MinWidth="170"/>
+                </StackPanel>
+                <StackPanel Tag="Document" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/doc.png" Width="20"/>
+                    <Label Name="document" Content="Document" MinWidth="170" />
+                </StackPanel>
+                <StackPanel Tag="Music" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/music.png" Width="20"/>
+                    <Label Name="music" Content="Music" MinWidth="170"/>
+                </StackPanel>
+                <StackPanel Tag="Videos" Style="{DynamicResource LeftMenuHover}"  MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/video.png" Width="20"/>
+                    <Label Name="video" Content="Videos" MinWidth="170" />
+                </StackPanel>
+                <StackPanel Tag="Images" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal">
+                    <Image Source="Resources/Icons/image.png" Width="20"/>
+                    <Label Name="images"  Content="Images" MinWidth="170"/>
+                </StackPanel>
+                <StackPanel Tag="Downloads" Style="{DynamicResource LeftMenuHover}" MouseLeftButtonUp="StaticFolderClick" Orientation="Horizontal" Margin="0,0,0,20">
+                    <Image Source="Resources/Icons/down.png" Width="20"/>
+                    <Label Name="downloads"  Content="Downloads" MinWidth="170"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5" Cursor="Arrow">
+                    <Image Source="Resources/Icons/my.png" Width="20"/>
+                    <Label Content="Logical Drives" MinWidth="170" FontWeight="Bold"/>
+                </StackPanel>
+                <GridSplitter HorizontalAlignment="Stretch" Height="3" ResizeBehavior="CurrentAndNext" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Width="195"/>
+            </StackPanel>
+        </Border>
+
+        <GridSplitter Width="3" HorizontalAlignment="Left" Margin="200,30,0,0" VerticalContentAlignment="Stretch"/>
+
+        <DataGrid 
+            GridLinesVisibility="Vertical" 
+            Name="DirsAndFiles" 
+            VerticalGridLinesBrush="#F0F0F0" 
+            Grid.Column="1" 
+            Grid.Row="1" 
+            AutoGenerateColumns="False"
+            VerticalAlignment="Top" 
+            IsReadOnly="True" 
+            MouseDoubleClick="FolderDoubleClick" SelectionChanged="SelectionChanged" Margin="203,30,0,0">
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="" Width="23" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding FileIcon}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="120" Header="Name"  Binding="{Binding FileName}"/>
+                <DataGridTextColumn Width="100" Header="Size" Binding="{Binding FileSize}"  />
+                <DataGridTextColumn Width="200" Header="Path" Binding="{Binding FileDirectory}" />
+                <DataGridTextColumn Header="Created" Binding="{Binding FileCreated}"  />
+                <DataGridTextColumn Header="Last accessed" Binding="{Binding FileAccessed}"  />
+                <DataGridTextColumn Header="Last update" Binding="{Binding FileModified}" />
+                <DataGridComboBoxColumn x:Name="Version" Header="Versions" SelectedValueBinding="{Binding Versions, Mode=TwoWay}" DisplayMemberPath="{Binding Versions}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Label Background="#FFF7F7F7" Name="items" Content="" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Width="200" VerticalContentAlignment="Bottom"/>
+        <Label Background="#FFF7F7F7" Name="size" Content="" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Stretch" Margin="203,0,0,0" />
+
+        <StackPanel Name="Sidebar" Grid.Column="2" Background="#FFF1F1F1" Panel.ZIndex="2" HorizontalAlignment="Right" Width="350" Margin="0,56,-400,0">
+            <Label Name="Close" Content="X" VerticalAlignment="Center" MouseLeftButtonDown="SidebarClose" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Width="20" Height="24" VerticalContentAlignment="Center" >
+                <Label.Background>
+                    <SolidColorBrush Color="#FF535353" Opacity="0.1"/>
+                </Label.Background>
+            </Label>
+        </StackPanel>
+
+    </Grid>
+
+    
+    <Window.Resources>
+       
+        <Style x:Key="LeftMenuHover" TargetType="{x:Type StackPanel}">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EFF0F1" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Storyboard x:Key="SidebarSlideShow" >
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,-400,0" To="0,0,0,0" DecelerationRatio=".2" Duration="0:0:.3" />
+        </Storyboard>
+        <Storyboard x:Key="SidebarSlideHide">
+            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,-400,0" AccelerationRatio=".2" Duration="0:0:.3" />
+        </Storyboard>
+    </Window.Resources>
+    
+</Controls:MetroWindow>
