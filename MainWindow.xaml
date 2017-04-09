@@ -78,7 +78,7 @@
             AutoGenerateColumns="False"
             VerticalAlignment="Top" 
             IsReadOnly="True" 
-            MouseDoubleClick="FolderDoubleClick" SelectionChanged="SelectionChanged" Margin="203,30,0,0">
+            MouseDoubleClick="FolderDoubleClick" Margin="203,30,0,0" MouseLeftButtonUp="FileLeftButtonClick">
 
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="" Width="23" IsReadOnly="True" CanUserResize="False">
@@ -107,6 +107,8 @@
                     <SolidColorBrush Color="#FF535353" Opacity="0.1"/>
                 </Label.Background>
             </Label>
+            <Image Name="SidebarFilePreview" Width="200" Height="230"/>
+            <Label Name="SidebarFileName" Content="Name: " HorizontalContentAlignment="Center" VerticalAlignment="Center" />
         </StackPanel>
 
     </Grid>

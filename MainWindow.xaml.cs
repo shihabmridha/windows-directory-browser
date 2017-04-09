@@ -91,6 +91,7 @@ namespace Project
                 }
                 DirsAndFiles.ItemsSource = FileList;
                 items.Content = (FileList.Count - 1) + " items";
+                size.Content = "No file selected.";
             } catch (Exception e) {
                 string error = e.ToString();
                 MessageBox.Show("The process failed: " + error, "Data loading error.");
@@ -129,7 +130,7 @@ namespace Project
         * My Files populate data
         */
         private void PopulateMyFiles(object sender, MouseButtonEventArgs e) {
-
+            SidebarFileName.Content = "";
         }
 
         /*
@@ -188,26 +189,46 @@ namespace Project
             }            
         }
 
+
+        private void FileLeftButtonClick(object sender, MouseButtonEventArgs e) {
+            FileAndDirAttributes files = (FileAndDirAttributes)DirsAndFiles.SelectedItem;            
+            if (!files.Type) {
+                if (!Sidebar.Margin.Right.Equals(0)) {
+                    Storyboard sb = Resources["SidebarSlideShow"] as Storyboard;
+                    sb.Begin(Sidebar);
+                }
+                size.Content = files.FileSize;
+                PopulateSidebarWithFileInfo(files.FileDirectory,files.FileName);              
+            } else {
+                if (Sidebar.Margin.Right.Equals(0)) {
+                    Storyboard sb = Resources["SidebarSlideHide"] as Storyboard;
+                    sb.Begin(Sidebar);
+                }
+                size.Content = "No file selected";
+            }
+        }
+
         /*
-         * Left click file
+         * Populate sidebar data
          */
-        private void SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            FileAndDirAttributes files = (FileAndDirAttributes)DirsAndFiles.SelectedItem;
-            size.Content = files.FileSize;
-            if (!files.Type && !Sidebar.Margin.Right.Equals(0)) {
-                Storyboard sb = Resources["SidebarSlideShow"] as Storyboard;
-                sb.Begin(Sidebar);                
+        private void PopulateSidebarWithFileInfo(string path, string name) {
+            string FullPath = path + "/" + name;
+            try {
+                SidebarFilePreview.Source = new BitmapImage(new Uri(FullPath));
+                SidebarFileName.Content = name;
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
             }            
         }
 
         /*
-         * Sidebar Close
-         */
+        * Sidebar Close
+        */
         private void SidebarClose(object sender, MouseButtonEventArgs e) {
             Storyboard sb = Resources["SidebarSlideHide"] as Storyboard;
             sb.Begin(Sidebar);
         }
 
-       
+
     }
 }

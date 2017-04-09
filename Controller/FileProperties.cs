@@ -21,6 +21,15 @@ namespace Project.Controller {
             } 
             return "Error!";
         }
+
+        public static string GetFileName(string path) {
+            FileInfo file = new FileInfo(path);
+            if (file.Exists) {
+                return file.Name;
+            }
+            return "Error!";
+        }
+
         public string GetFileSize() {
             FileInfo file = new FileInfo(FilePath);
             long Length = file.Length;
