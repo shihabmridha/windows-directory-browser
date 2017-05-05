@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,17 +8,19 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Project.Controller {
-    class FileReciever {
-        Thread t1;
+    class FileReceiver {
+        public Thread t1;
         int flag = 0;
         string receivedPath;
-
-        public FileReciever(string path) {
+        ProgressDialogController ReceiveDialog;
+        public FileReceiver(string path, ProgressDialogController pr) {
             t1 = new Thread(new ThreadStart(StartListening));
             t1.Start();
             receivedPath = path;
+            ReceiveDialog = pr;
         }
 
         public class StateObject {
@@ -91,15 +94,15 @@ namespace Project.Controller {
                     Console.WriteLine("ReadCallback Error: " + e.Message);
                 }                
             } else {
-                //Invoke(new MyDelegate(LabelWriter));
-                //MessageBoxResult res = MessageBox.Show("File sent successfully.", "Successfull", MessageBoxButton.OK, MessageBoxImage.Information);               
-                t1.Abort();
+                FinishTheJob();
             }
         }
 
-        /*
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+        async void FinishTheJob() {
+            ReceiveDialog.SetProgress(1);
+            await ReceiveDialog.CloseAsync();            
             t1.Abort();
-        }*/
+        }
+
     }
 }

@@ -112,9 +112,10 @@
             <Controls:Flyout x:Name="Sidebar" Header="Flyout" Theme="Light" Position="Right" Width="350" IsOpen="False">
                 <StackPanel HorizontalAlignment="Center" Width="auto">
                     <Image Source="/Resources/placeholder.png" Name="SidebarFilePreview" Width="200" Height="200"/>
-                    <Label Name="SidebarFileName" Content="Name: " HorizontalContentAlignment="Center" VerticalAlignment="Center" />
-                    <Label Name="SidebarFileSize" Content="Size: " HorizontalContentAlignment="Center" VerticalAlignment="Center" />
-                    <Label Name="SidebarFileModify" Content="Modify: " HorizontalContentAlignment="Center" VerticalAlignment="Center" />
+                    <Label Name="SidebarFileName" Content="Name: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                    <Label Name="SidebarFileSize" Content="Size: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                    <Label Name="SidebarFileModify" Content="Modify: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
+                    <Button Name="SidebarShareButton" Content="Share" Click="SendFile" />
                 </StackPanel>
             </Controls:Flyout>                       
         </Controls:FlyoutsControl>

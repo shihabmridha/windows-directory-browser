@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.3\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -81,7 +82,8 @@
     </ApplicationDefinition>
     <Compile Include="Controller\DashboardMenuController.cs" />
     <Compile Include="Controller\DataGridController.cs" />
-    <Compile Include="Controller\FileReciever.cs" />
+    <Compile Include="Controller\FileReceiver.cs" />
+    <Compile Include="Controller\FileSender.cs" />
     <Compile Include="Controller\ProfileController.cs" />
     <Compile Include="Controller\Session.cs" />
     <Compile Include="Controller\ShareCode.cs" />
