@@ -70,32 +70,42 @@ namespace Project.Controller {
             String content = String.Empty;
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.workSocket;
-            int bytesRead = handler.EndReceive(ar);
-            if (bytesRead > 0) {
-                try {
-                    if (flag == 0) {
-                        fileNameLen = BitConverter.ToInt32(state.buffer, 0);
-                        string fileName = Encoding.UTF8.GetString(state.buffer, 4, fileNameLen);
-                        receivedPath += fileName;
-                        flag++;
-                    }
-                    if (flag >= 1) {
-                        BinaryWriter writer = new BinaryWriter(File.Open(receivedPath, FileMode.Append));
-                        if (flag == 1) {
-                            writer.Write(state.buffer, 4 + fileNameLen, bytesRead - (4 + fileNameLen));
-                            flag++;
-                        } else {
-                            writer.Write(state.buffer, 0, bytesRead);
-                        }
-                        writer.Close();
-                        handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), state);
-                    }
-                } catch (Exception e) {
-                    Console.WriteLine("ReadCallback Error: " + e.Message);
-                }                
-            } else {
-                FinishTheJob();
+            SocketError errorCode;
+            int bytesRead = handler.EndReceive(ar, out errorCode);
+            if (errorCode != SocketError.Success) {
+                bytesRead = 0;
             }
+            else {
+                if (bytesRead > 0) {
+                    try {
+                        if (flag == 0) {
+                            fileNameLen = BitConverter.ToInt32(state.buffer, 0);
+                            string fileName = Encoding.UTF8.GetString(state.buffer, 4, fileNameLen);
+                            receivedPath += fileName;
+                            flag++;
+                        }
+                        if (flag >= 1) {
+                            BinaryWriter writer = new BinaryWriter(File.Open(receivedPath, FileMode.Append));
+                            if (flag == 1) {
+                                writer.Write(state.buffer, 4 + fileNameLen, bytesRead - (4 + fileNameLen));
+                                flag++;
+                            }
+                            else {
+                                writer.Write(state.buffer, 0, bytesRead);
+                            }
+                            writer.Close();
+                            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), state);
+                        }
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine("ReadCallback Error: " + e.Message);
+                    }
+                }
+                else {
+                    FinishTheJob();
+                }
+            }
+            
         }
 
         async void FinishTheJob() {

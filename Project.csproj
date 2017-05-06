@@ -84,10 +84,12 @@
     <Compile Include="Controller\DataGridController.cs" />
     <Compile Include="Controller\FileReceiver.cs" />
     <Compile Include="Controller\FileSender.cs" />
+    <Compile Include="Controller\Partners.cs" />
     <Compile Include="Controller\ProfileController.cs" />
     <Compile Include="Controller\Session.cs" />
     <Compile Include="Controller\ShareCode.cs" />
     <Compile Include="Controller\UsersCred.cs" />
+    <Compile Include="Database\ContactsData.cs" />
     <Compile Include="Database\DatabaseCon.cs" />
     <Compile Include="Database\FileData.cs" />
     <Compile Include="Database\UserAuth.cs" />
@@ -95,6 +97,9 @@
     <Compile Include="Database\ProfileData.cs" />
     <Compile Include="UI\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NewContact.xaml.cs">
+      <DependentUpon>NewContact.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Profile.xaml.cs">
       <DependentUpon>Profile.xaml</DependentUpon>
@@ -118,6 +123,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\NewContact.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

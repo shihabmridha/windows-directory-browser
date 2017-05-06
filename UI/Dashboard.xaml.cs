@@ -75,11 +75,16 @@ namespace Project
             if (file.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 path = file.FileName;
-                FileData db = new FileData();
-                db.AddMyFile(path);
+                FileData.AddMyFile(path);
+                FileData.AddFileVersion(path,path);
                 MessageBox.Show("Confirmation.", "File added successfully.");
             }
             
+        }
+        private void AddNewContact(object sender, RoutedEventArgs e) {
+            NewContact next = new NewContact();
+            next.Show();
+            this.Hide();
         }
         private void UpdateProfile(object sender, RoutedEventArgs e)
         {
@@ -131,6 +136,7 @@ namespace Project
             string label = (sender as StackPanel).Tag.ToString();
             InMyFiles = false;
             VersionCol.Visibility = Visibility.Hidden;
+            SidebarReviseButton.Visibility = Visibility.Hidden;
             PopulateDataGrid(label);
         }
 
@@ -141,6 +147,7 @@ namespace Project
         {
             VersionCol.Visibility = Visibility.Visible;
             InMyFiles = true;
+            SidebarReviseButton.Visibility = Visibility.Visible;
             DatabaseCon con = new DatabaseCon();
             con.OpenConnection();
             List<string> paths = FileData.GetMyFilePath();
@@ -184,32 +191,38 @@ namespace Project
                     PopulateDataGrid(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     break;
                 case "Document":
                     PopulateDataGrid(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     break;
                 case "Music":
                     PopulateDataGrid(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     break;
                 case "Videos":
                     PopulateDataGrid(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos));
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     break;
                 case "Downloads":
                     string Downloads = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     PopulateDataGrid(Downloads + "\\Downloads");
                     break;
                 default:
                     PopulateDataGrid(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
                     InMyFiles = false;
                     VersionCol.Visibility = Visibility.Hidden;
+                    SidebarReviseButton.Visibility = Visibility.Hidden;
                     break;
             }
         }
@@ -282,7 +295,7 @@ namespace Project
                 }
                 else {
                     VersionsList.Visibility = Visibility.Hidden;
-                }               
+                }          
                 SidebarFileName.Content = "Name: " + file.FileName;
                 SidebarFileSize.Content = "Size: " + file.FileSize;
                 SidebarFileModify.Content = "Last modify: " + file.FileModified;
@@ -293,8 +306,7 @@ namespace Project
                 SidebarFilePreview.Source = new BitmapImage(new Uri(@"/Resources/placeholder.png", UriKind.Relative));
                 Console.WriteLine(e.Message);
             }
-        }
-
+        }       
 
         private void SessionLogView(object sender, RoutedEventArgs e)
         {
@@ -312,6 +324,7 @@ namespace Project
         private async void ReceiveFile(object sender, RoutedEventArgs e)
         {
             result = await this.ShowProgressAsync("Receiving file", "Please wait...", true);
+            FileReceiver receive = new FileReceiver(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\", result);
             result.SetProgress(.7);
             result.Canceled += CancelDialog;
         }
@@ -323,25 +336,56 @@ namespace Project
 
         private void SendFile(object sender, RoutedEventArgs e)
         {
-
+            FileAndDirAttributes files = (FileAndDirAttributes)DirsAndFiles.SelectedItem;
+            FileSender send = new FileSender();
+            Partners pr = new Partners();
+            string code = "";
+            code = ContactsData.GetShareCode(ContactName.Text);
+            string ip = "";
+            if (code != "") {
+                ip = ShareCode.GetIPFromCode(code);                 
+            }
+            if (ip != "" && pr.IsContactAvailable(ip)) {
+                if (InMyFiles == true) {
+                    string path = FileData.SelectedVersionPath(files.FileDirectory + "\\" + files.FileName, VersionsList.SelectedIndex);
+                    DataGridController dgc = new DataGridController();
+                    send.SendFile(path, ip);
+                    System.Diagnostics.Process.Start(@path);
+                }
+                else {
+                    send.SendFile(files.FileDirectory + "\\" + files.FileName, "127.0.0.1");
+                }
+            }
+            else {
+                MessageBox.Show("Error","Couldn't connect with partner");
+            }
+            
+            
         }
 
         private void ReviseFile(object sender, RoutedEventArgs e)
         {
-            string path = "";
+            FileAndDirAttributes files = (FileAndDirAttributes)DirsAndFiles.SelectedItem;
+            string path = files.FileDirectory+"\\"+files.FileName;
             System.Windows.Forms.OpenFileDialog file = new System.Windows.Forms.OpenFileDialog();
             if (file.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                path = file.FileName;
-                FileData db = new FileData();
-                FileData.AddFileVersion(path);
+                FileData.AddFileVersion(path,file.FileName);
                 MessageBox.Show("Confirmation.", "Version added successfully.");
             }            
         }
 
         private void OpenInExplorer(object sender, RoutedEventArgs e) {
             FileAndDirAttributes files = (FileAndDirAttributes)DirsAndFiles.SelectedItem;
-            System.Diagnostics.Process.Start(@files.FileDirectory);
+            if (InMyFiles == true) {
+                string path = FileData.SelectedVersionPath(files.FileDirectory+"\\"+files.FileName,VersionsList.SelectedIndex);
+                DataGridController dgc = new DataGridController();                
+                System.Diagnostics.Process.Start(@dgc.GetParent(path));
+            }
+            else {              
+                System.Diagnostics.Process.Start(@files.FileDirectory);
+            }
+            
         }
 
     }

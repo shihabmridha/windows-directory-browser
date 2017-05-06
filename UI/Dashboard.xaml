@@ -14,6 +14,7 @@
                 <MenuItem Header="File">
                     <MenuItem Header="Add to My files" Click="AddToMyFiles"/>
                     <MenuItem Header="Recieve file" Click="ReceiveFile"/>
+                    <MenuItem Header="Add contact" Click="AddNewContact"/>
                     <MenuItem Header="Log out" Click="LogOut"/>
                     <MenuItem Header="Close"/>
                 </MenuItem>
@@ -114,11 +115,12 @@
                     <Label Name="SidebarFileName" Content="Name: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                     <Label Name="SidebarFileSize" Content="Size: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                     <Label Name="SidebarFileModify" Content="Modify: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
-                    <ComboBox Name="VersionsList" Visibility="Hidden" ItemsSource="{Binding item}" SelectedItem="{Binding SimpleStringProperty, Mode=TwoWay}" Text="Select"/>
+                    <ComboBox Name="VersionsList" Visibility="Hidden" Margin="0,0,0,10" ItemsSource="{Binding item}" SelectedItem="{Binding SimpleStringProperty, Mode=TwoWay}" Controls:TextBoxHelper.Watermark="Select version"/>
+                    <TextBox Name="ContactName" Margin="0,0,0,10" />
                     <StackPanel Orientation="Horizontal">
                         <Button Name="SidebarShareButton" Content="Open folder" Click="OpenInExplorer" Margin="0,0,10,0"/>
-                        <Button Name="SidebarReviseButton" Content="Revise" Click="ReviseFile" Margin="0,0,10,0"/>
-                        <Button Name="SidebarSendButton" Content="Send" Click="SendFile" />
+                        <Button Name="SidebarSendButton" Content="Send" Click="SendFile" Margin="0,0,10,0"/>
+                        <Button Name="SidebarReviseButton" Visibility="Hidden" Content="Revise" Click="ReviseFile"/>
                     </StackPanel>
                 </StackPanel>
             </Controls:Flyout>                       

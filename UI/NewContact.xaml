@@ -1,0 +1,64 @@
+﻿<Controls:MetroWindow x:Class="Project.UI.NewContact"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        BorderBrush="#f1f1f1"
+        Title="Add new contact" Height="700" Width="1000">
+    <StackPanel Background="#8D99AE">
+        <Image Source="/Resources/logo.png" Width="100" Margin="0,16,0,0"/>
+        <StackPanel Background="White" Width="400" Height="324" Margin="0,20,0,0">
+            <Label Content="CONTACT" HorizontalContentAlignment="Center" FontSize="24" FontFamily="Lato Light" Background="WhiteSmoke" Foreground="#FF727272" Height="45" Margin="0" Padding="5,7,5,5"/>
+            <Border Padding="30,20,30,22">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Contact name" Foreground="#FF4F4F4F" FontFamily="Lato" HorizontalContentAlignment="Center" HorizontalAlignment="Left" FontSize="14"/>
+                    <TextBox Name="ContactName" Width="330" Margin="0,0,0,5"/>
+                    <Label Content="Contact code" Foreground="#FF4F4F4F" FontFamily="Lato" HorizontalContentAlignment="Center" HorizontalAlignment="Left" FontSize="14"/>
+                    <TextBox Name="ContactCode" Width="330" Margin="0,0,0,10"/>
+                    <StackPanel Orientation="Horizontal" Width="330">
+                        <ComboBox Name="ContactList" Width="255" Margin="0,0,10,0" ItemsSource="{Binding contacts}" SelectedItem="{Binding SimpleStringProperty, Mode=TwoWay}" Height="29" />
+                        <Button Content="DELETE" Click="DeleteContact"/>
+                    </StackPanel>
+                    <Label Name="cMessage" Content="" Foreground="#FFE60000" FontFamily="Lato" HorizontalContentAlignment="Center" HorizontalAlignment="Left" FontSize="14"/>
+                </StackPanel>
+            </Border>
+            <Grid Background="WhiteSmoke" Height="60">
+                <Label Grid.Row="0" Grid.Column="0" Foreground="#FF727272" FontFamily="Lato Light" Content="Go back to " Margin="30,15,0,0" FontSize="14"/>
+                <Label Grid.Row="0" Grid.Column="1" Foreground="#FFFF6F59" FontFamily="Lato Light" Content="Dashboard" Margin="100,15,0,0" FontSize="14" MouseLeftButtonUp="OpenDashboard"/>
+                <Button Grid.Row= "0" Grid.Column="2" Style="{DynamicResource JoinButton}" Content="SAVE" Click="SaveContact" HorizontalAlignment="Right" />
+            </Grid>
+        </StackPanel>
+    </StackPanel>
+
+
+    <Window.Resources>
+        <Style x:Key="LabelLink" TargetType="{x:Type Label}">
+            <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+        </Style>
+
+        <Style x:Key="JoinButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#FFFF6F59"/>
+            <Setter Property="Margin" Value="0,0,30,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" Padding="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFDC887B" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+</Controls:MetroWindow>

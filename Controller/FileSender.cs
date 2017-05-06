@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project.Controller {
     class FileSender {
-        bool IsSocketConnected(Socket s) {
+        public bool IsSocketConnected(Socket s) {
             return !((s.Poll(1000, SelectMode.SelectRead) && (s.Available == 0)) || !s.Connected);
         }
 
@@ -31,13 +31,12 @@ namespace Project.Controller {
             try {
                 clientSock.Connect(IP, 9050); //target machine's ip address and the port number
                 if (IsSocketConnected(clientSock)) {
-                    clientSock.Send(m_clientData);
-                    clientSock.Shutdown(SocketShutdown.Both);
-                    clientSock.Close();
+                    clientSock.Send(m_clientData);                    
                     Console.WriteLine("Shit Connected!");
                 } else {
                     Console.WriteLine("Shit Not Connected!");
-                }                
+                }
+                clientSock.Close();
             } catch (SocketException ex) {
                 if (ex.NativeErrorCode.Equals(10035))
                     Console.WriteLine("Still Connected, but the Send would block");
