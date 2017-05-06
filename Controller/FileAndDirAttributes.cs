@@ -17,6 +17,6 @@ namespace Project.Controller {
         public string FileCreated { get; set; }
         public string FileAccessed { get; set; }
         public string FileModified { get; set; }        
-        public List<string> Versions { get; set; }
+        public int Versions { get; set; }
     }
 }

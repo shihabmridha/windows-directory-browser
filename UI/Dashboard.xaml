@@ -13,7 +13,7 @@
             <Menu Grid.Row="0" Grid.Column="0" VerticalContentAlignment="Center" VerticalAlignment="Top">
                 <MenuItem Header="File">
                     <MenuItem Header="Add to My files" Click="AddToMyFiles"/>
-                    <MenuItem Header="Recieve file" Click="RecieveFile"/>
+                    <MenuItem Header="Recieve file" Click="ReceiveFile"/>
                     <MenuItem Header="Log out" Click="LogOut"/>
                     <MenuItem Header="Close"/>
                 </MenuItem>
@@ -99,8 +99,7 @@
                 <DataGridTextColumn Header="Created" Binding="{Binding FileCreated}"  />
                 <DataGridTextColumn Header="Last accessed" Binding="{Binding FileAccessed}"  />
                 <DataGridTextColumn Header="Last update" Binding="{Binding FileModified}" />
-                <!-- SelectedValueBinding="{Binding Versions, Mode=TwoWay}" 
-                <<DataGridComboBoxColumn x:Name="Version" Header="Versions"  DisplayMemberPath="{Binding Versions}"/>-->
+                <DataGridTextColumn x:Name="VersionCol" Visibility="Hidden" Header="Versions" Binding="{Binding Versions}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -110,12 +109,17 @@
 
         <Controls:FlyoutsControl>
             <Controls:Flyout x:Name="Sidebar" Header="Flyout" Theme="Light" Position="Right" Width="350" IsOpen="False">
-                <StackPanel HorizontalAlignment="Center" Width="auto">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="auto">
                     <Image Source="/Resources/placeholder.png" Name="SidebarFilePreview" Width="200" Height="200"/>
                     <Label Name="SidebarFileName" Content="Name: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                     <Label Name="SidebarFileSize" Content="Size: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
                     <Label Name="SidebarFileModify" Content="Modify: " HorizontalContentAlignment="Left" VerticalAlignment="Center" />
-                    <Button Name="SidebarShareButton" Content="Share" Click="SendFile" />
+                    <ComboBox Name="VersionsList" Visibility="Hidden" ItemsSource="{Binding item}" SelectedItem="{Binding SimpleStringProperty, Mode=TwoWay}" Text="Select"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="SidebarShareButton" Content="Open folder" Click="OpenInExplorer" Margin="0,0,10,0"/>
+                        <Button Name="SidebarReviseButton" Content="Revise" Click="ReviseFile" Margin="0,0,10,0"/>
+                        <Button Name="SidebarSendButton" Content="Send" Click="SendFile" />
+                    </StackPanel>
                 </StackPanel>
             </Controls:Flyout>                       
         </Controls:FlyoutsControl>

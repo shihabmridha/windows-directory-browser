@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 namespace Project.Database {
     class ProfileData {
         public static Users GetUserInformation() {
-            
-            
+                        
             Users usr = new Users();
             DatabaseCon con = new DatabaseCon();
             con.OpenConnection();
             
-
             SqlDataReader read = con.DataReader("select * from Users where username='" + Session.sec.UserName + "'");
             while (read.Read()) {
                 usr.FirstName = (string) read["first_name"];
@@ -25,7 +23,7 @@ namespace Project.Database {
                 usr.ShareCode = (string) read["share_code"];
                 Console.WriteLine("Username: " + usr.ShareCode);
             }
-
+            con.CloseConnection();
             return usr;
         }
     }

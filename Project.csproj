@@ -89,6 +89,7 @@
     <Compile Include="Controller\ShareCode.cs" />
     <Compile Include="Controller\UsersCred.cs" />
     <Compile Include="Database\DatabaseCon.cs" />
+    <Compile Include="Database\FileData.cs" />
     <Compile Include="Database\UserAuth.cs" />
     <Compile Include="Database\SessionData.cs" />
     <Compile Include="Database\ProfileData.cs" />
